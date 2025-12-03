@@ -16,16 +16,33 @@ namespace AdventOfCode2025
     {
         private int Position { get; set; } = 50;
 
-        public int Password { get; private set; } = 0;
+        public int PasswordPart1 { get; private set; } = 0;
+        public int PasswordPart2 { get; private set; } = 0;
 
-        public void ApplyTurn(Turn turn)
+        private void ApplyTurn(Turn turn)
         {
-            Position += turn.Distance * (int)turn.Direction;
-            Position %= 100;
+            for (int i = 0; i < turn.Distance; i++)
+            {
+                Position += (int)turn.Direction;
+                Position %= 100;
+
+                if (Position == 0)
+                {
+                    PasswordPart2++;
+                }
+            }
 
             if (Position == 0)
             {
-                Password++;
+                PasswordPart1++;
+            }
+        }
+
+        public void ApplyTurns(IEnumerable<Turn> turns)
+        {
+            foreach (var turn in turns)
+            {
+                ApplyTurn(turn);
             }
         }
     }
@@ -37,7 +54,7 @@ namespace AdventOfCode2025
             DayNumber = 1;
         }
 
-        private IEnumerable<Turn> GetTurns(string input)
+        private static List<Turn> GetTurns(string input)
         {
             List<Turn> turns = [];
 
@@ -67,22 +84,22 @@ namespace AdventOfCode2025
             return turns;
         }
 
-        public override string Part1(string input)
+        private static Dial TurnDial(string input)
         {
             var turns = GetTurns(input);
             Dial dial = new();
+            dial.ApplyTurns(turns);
+            return dial;
+        }
 
-            foreach (var turn in turns)
-            {
-                dial.ApplyTurn(turn);
-            }
-
-            return dial.Password.ToString();
+        public override string Part1(string input)
+        {
+            return TurnDial(input).PasswordPart1.ToString();
         }
 
         public override string Part2(string input)
         {
-            throw new NotImplementedException();
+            return TurnDial(input).PasswordPart2.ToString();
         }
     }
 }

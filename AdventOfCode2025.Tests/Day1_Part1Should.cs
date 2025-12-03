@@ -14,7 +14,8 @@ L55
 L1
 L99
 R14
-L82";
+L82
+";
             Day1 day1 = new();
             string result = day1.Part1(input);
             Assert.Equal("3", result);
