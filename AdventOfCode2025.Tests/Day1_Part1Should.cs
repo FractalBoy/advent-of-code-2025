@@ -17,7 +17,7 @@ R14
 L82";
             Day1 day1 = new();
             string result = day1.Part1(input);
-            Assert.NotNull(result);
+            Assert.Equal("3", result);
         }
     }
 }
